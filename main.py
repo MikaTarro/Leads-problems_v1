@@ -2,17 +2,20 @@ import requests
 import logging
 from datetime import datetime
 
-# Настройка логирования
+"""
+Все сообщения уровня INFO и выше будут записываться в файл service_check.log
+"""
 logging.basicConfig(filename='service_check.log', level=logging.INFO)
 
-# Список сервисов
 services = {
     "Formit": "https://formit.fake",
     "LeadSync": "https://leadsync.fake",
     "MailPipe": "https://mailpipe.fake",
     "BitDashboard": "https://bitdashboard.fake"
 }
-
+"""
+Сортим апи по доступности через респонс= 200 или падает
+"""
 def check_service(url):
     try:
         response = requests.get(url)
@@ -22,7 +25,9 @@ def check_service(url):
             log_error(url, response.status_code)
     except requests.exceptions.RequestException as e:
         log_error(url, str(e))
-
+"""
+Записываем ошибки
+"""
 def log_error(url, error):
     log_entry = f"{datetime.now()} - {url} - Ошибка: {error}"
     logging.error(log_entry)
